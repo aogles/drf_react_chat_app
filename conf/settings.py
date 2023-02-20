@@ -55,6 +55,7 @@ INSTALLED_APPS = [
 
     'channels.apps.ChannelsConfig',
     'api.apps.ApiConfig',
+    'frontend.apps.FrontendConfig',
 
 
 ]
@@ -65,9 +66,10 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+        'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        # keep for now for the browserable api
         'rest_framework.authentication.SessionAuthentication',
         # for token based implementation in react
         'rest_framework.authentication.TokenAuthentication',
@@ -155,4 +157,26 @@ STATIC_URL = 'static/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Static file directories
+# https://docs.djangoproject.com/en/3.1/ref/settings/#staticfiles-dirs
+
+
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'frontend/static/build/static'),)
+REACT_APP_DIR = os.path.join(BASE_DIR, 'frontend/static')
+
+# Managing files
+# https://docs.djangoproject.com/en/3.1/topics/files/#managing-files
+
+# MEDIA_ROOT is the path to the root directory where the files are getting stored
+# MEDIA_URL is the URL that will serve the media files
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+# Email backend
+# https://docs.djangoproject.com/en/3.0/ref/settings/#email-backend
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
