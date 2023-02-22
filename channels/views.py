@@ -23,11 +23,15 @@ class ChannelDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class MessageListAPIView(generics.ListCreateAPIView):
-    queryset = Message.objects.all()
+    # queryset = Message.objects.all()
     serializer_class = MessageSerializer
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+    def get_queryset(self):
+        channel = self.kwargs['channel']
+        return Message.objects.filter(channel=channel)
 
 
 class MessageDetailAPIView(generics.RetrieveUpdateDestroyAPIView):

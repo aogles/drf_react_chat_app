@@ -38,6 +38,7 @@ function LoginForm(props) {
     }
     const data = await response.json();
     Cookies.set("Authorization", `Token ${data.key}`);
+    props.setPage("channels");
   };
   return (
     <form onSubmit={handleSubmit}>

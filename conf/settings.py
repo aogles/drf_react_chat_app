@@ -38,9 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.sites',
     'django.contrib.staticfiles',
-
-
 
     # 3rd party
     'rest_framework',
@@ -48,8 +47,8 @@ INSTALLED_APPS = [
     'dj_rest_auth',
     'allauth',
     'allauth.account',
-    'dj_rest_auth.registration',
     'allauth.socialaccount',
+    'dj_rest_auth.registration',
 
     # local
 
@@ -60,13 +59,12 @@ INSTALLED_APPS = [
 
 ]
 
-SITE_ID = 1
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+        # 'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         # keep for now for the browserable api
@@ -175,6 +173,8 @@ REACT_APP_DIR = os.path.join(BASE_DIR, 'frontend/static')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+SITE_ID = 1
 
 # Email backend
 # https://docs.djangoproject.com/en/3.0/ref/settings/#email-backend
