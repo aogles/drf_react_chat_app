@@ -14,8 +14,11 @@ class Channel(models.Model):
 class Message(models.Model):
     text = models.TextField()
     channel = models.ForeignKey(Channel, on_delete=models.CASCADE, blank=True)
-    users = models.ForeignKey(settings.AUTH_USER_MODEL,
-                              on_delete=models.CASCADE, blank=True)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True)
+    # created_at = models.DateTimeField(auto_now=True)
+    # updated_at = models.DateTimeField(auto_now=True)
+    # is_published = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.text[:50]
+        return self.text[:100]

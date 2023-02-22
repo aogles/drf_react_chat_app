@@ -40,7 +40,7 @@ function LoginForm(props) {
     Cookies.set("Authorization", `Token ${data.key}`);
   };
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <label html="email">Enter Email</label>
       <input
         id="email"
@@ -64,7 +64,7 @@ function LoginForm(props) {
       <label html="password">Password</label>
       <input
         id="password"
-        type="text"
+        type="password"
         placeholder="enter password"
         name="password"
         value={state.password}

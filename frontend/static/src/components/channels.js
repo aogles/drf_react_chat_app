@@ -7,7 +7,7 @@ function ChannelsList() {
 
   useEffect(() => {
     const getChannels = async () => {
-      const response = await fetch("/api_v1/books/");
+      const response = await fetch("/api_v1/channels/");
 
       if (!response.ok) {
         throw new Error("Network response was not OK");
@@ -43,7 +43,7 @@ function ChannelsList() {
 
   const addMessage = async () => {
     const message = {
-      book: 2,
+      book: 3,
       text: "lets discuss baby yoda",
     };
 
@@ -55,7 +55,7 @@ function ChannelsList() {
       },
       body: JSON.stringify(message),
     };
-    const response = await fetch("/api_v1/channels/2/messages/", options);
+    const response = await fetch("/api_v1/channels/1/messages/", options);
     if (!response.ok) {
       throw new Error("network repsonse not ok.");
     }
