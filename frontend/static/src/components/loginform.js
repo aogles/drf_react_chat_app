@@ -40,40 +40,47 @@ function LoginForm(props) {
     Cookies.set("Authorization", `Token ${data.key}`);
     props.setPage("channels");
   };
+  const handleLogout = () => {
+    Cookies.remove("Authorization");
+  };
+
   return (
-    <form onSubmit={handleSubmit}>
-      <label html="email">Enter Email</label>
-      <input
-        id="email"
-        type="email"
-        placeholder="enter email"
-        name="email"
-        value={state.email}
-        onChange={handleInput}
-      ></input>
+    <div>
+      <form onSubmit={handleSubmit}>
+        <label html="email">Enter Email</label>
+        <input
+          id="email"
+          type="email"
+          placeholder="enter email"
+          name="email"
+          value={state.email}
+          onChange={handleInput}
+        ></input>
 
-      <label html="username">Username</label>
-      <input
-        id="username"
-        type="text"
-        placeholder="enter username"
-        name="username"
-        value={state.username}
-        onChange={handleInput}
-      ></input>
+        <label html="username">Username</label>
+        <input
+          id="username"
+          type="text"
+          placeholder="enter username"
+          name="username"
+          value={state.username}
+          onChange={handleInput}
+        ></input>
 
-      <label html="password">Password</label>
-      <input
-        id="password"
-        type="password"
-        placeholder="enter password"
-        name="password"
-        value={state.password}
-        onChange={handleInput}
-      ></input>
+        <label html="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          placeholder="enter password"
+          name="password"
+          value={state.password}
+          onChange={handleInput}
+        ></input>
 
-      <button type="submit">Login</button>
-    </form>
+        <button type="submit">Login</button>
+      </form>
+      <button>Need an account?</button>
+    </div>
   );
 }
 

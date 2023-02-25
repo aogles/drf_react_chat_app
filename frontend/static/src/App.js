@@ -10,25 +10,37 @@ function App() {
     !!Cookies.get("Authorization") ? "channels" : "login"
   );
 
+  const handleLogout = async () => {
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+        "X-CSRFToken": Cookies.get("csrftoken"),
+      },
+    };
+    const response = await fetch("/dj-rest-auth/logout/", options).catch(
+      "handleError"
+    );
+    if (!response.ok) {
+      throw new Error("newtwork response was not OK");
+    }
+    Cookies.remove("Authorization");
+    setPage("login");
+  };
+
   return (
-  <>
-    <Nav defaultActiveKey="/home" as="ul">
-      <Nav.Item as="li">
-        <Nav.Link href="/home">Active</Nav.Link>
-      </Nav.Item>
-      <Nav.Item as="li">
-        <Nav.Link eventKey="link-1">Link</Nav.Link>
-      </Nav.Item>
-      <Nav.Item as="li">
-        <Nav.Link eventKey="link-2">Link</Nav.Link>
-      </Nav.Item>
-    </Nav>
-  
-    {page === 'channels' &&  <ChannelsList />}
-    {page === 'login' && <LoginForm setPage={setPage} />}
-  </>
+    <>
+      {page === "channels" && (
+        <>
+          <button onClick={() => setPage("channels")}>Home</button>
+          <button onClick={handleLogout}>Logout</button>
+        </>
+      )}
+
+      {page === "channels" && <ChannelsList />}
+      {page === "login" && <LoginForm setPage={setPage} />}
+    </>
   );
 }
-  
 
 export default App;

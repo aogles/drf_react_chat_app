@@ -5,8 +5,9 @@ import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 
 function ChannelsList() {
+  const [caption, setCaption] = useState("");
   const [channels, setChannels] = useState(null);
-  const [messages, setMessages] = useState(null);
+  const [messages, setMessages] = useState([]);
   const [selectedChannel, setSelectedChannel] = useState(null);
 
   useEffect(() => {
@@ -20,8 +21,18 @@ function ChannelsList() {
       const data = await response.json();
       setChannels(data);
     };
+    const getMessages = async () => {
+      const response = await fetch("/api_v1/channels/1/messages/");
+      if (!response.ok) {
+        throw new Error("Network response was not OK");
+      }
+
+      const data = await response.json();
+      setMessages(data);
+    };
 
     getChannels();
+    getMessages();
   }, []);
 
   const addChannel = async () => {
@@ -57,31 +68,7 @@ function ChannelsList() {
     setMessages(data);
   };
 
-  const addMessage = async () => {
-    const message = {
-      channel: 1,
-      text: "lets discuss baby yoda",
-    };
-
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": Cookies.get("csrftoken"),
-      },
-      body: JSON.stringify(message),
-    };
-    const response = await fetch("/api_v1/channels/1/messages/", options);
-    if (!response.ok) {
-      throw new Error("network repsonse not ok.");
-    }
-    const data = await response.json();
-  };
-
-  if (!channels) {
-    return <div>Fetching data ...</div>;
-  }
-  const channelsHTML = channels.map((channel) => (
+  const channelsHTML = channels?.map((channel) => (
     <button
       key={channel.id}
       type="button"
@@ -91,36 +78,70 @@ function ChannelsList() {
     </button>
   ));
 
-  const messagesHTML =
-    messages && messages.map((message) => <div key={message.id}></div>);
-  //document.message.submit();
-  console.log(messagesHTML);
+  const messagesHTML = messages?.map((message) => (
+    <div key={message.id}>{message.text}</div>
+  ));
+
+  // console.log(caption);
+
+  //addMessage
+  // fetch request will send caption to the
+  // need to send the channel id in the params
+  console.log(caption);
+  console.log(selectedChannel);
+
+  //editMessage
+
+  //deleteMessage
+  // fetch request will delete message on the detail apiview
+
   return (
     <div className="App">
       <Card>
         <Card.Header>{channelsHTML}</Card.Header>
         <Card.Body>
           <Card.Title></Card.Title>
-          <Form.Label>Chat Message</Form.Label>
-          <Form.Control
-            addMessage={addMessage}
-            type="text"
-            id="message"
-            placeholder="Enter your message here"
-          />
-          <Button type="submit" onClick={addMessage} variant="primary">
-            add Message
-          </Button>
+          <Form.Label>Channel name</Form.Label>
+          <button type="button" onClick={addChannel}>
+            add Chat Group
+          </button>
         </Card.Body>
       </Card>
 
-      {messages && messagesHTML}
-
-      <button type="button" onClick={addChannel}>
-        add Chat Group
-      </button>
+      <form role="alert" aria-live="assertive" aria-atomic="true">
+        <div className="toast-body">
+          <input
+            onChange={(e) => setCaption(e.target.value)}
+            value={caption}
+            type="text"
+            name="caption"
+            placeholder="Enter your message here"
+          />
+          <div className="mt-2 pt-2 border-top">
+            <button type="button" onClick={() => console.log("submit")}>
+              {" "}
+              add message
+            </button>
+            <button
+              type="button"
+              className="btn btn-primary btn-sm"
+              onClick={() => console.log("submit")}
+            >
+              Delete Message
+            </button>
+            <button
+              type="button"
+              className="btn btn-secondary btn-sm"
+              data-bs-dismiss="toast"
+              onSubmit={() => console.log("submit")}
+            >
+              Edit
+            </button>
+          </div>
+        </div>
+      </form>
+      {messagesHTML}
     </div>
   );
 }
-
 export default ChannelsList;
