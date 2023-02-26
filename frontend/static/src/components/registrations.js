@@ -13,9 +13,6 @@ const INITIAL_STATE = {
 function RegistrationForm(props) {
   const [state, setState] = useState(INITIAL_STATE);
 
-  // const [name, setName] = useState("Brande");
-
-  //   for password1, password2 error
   const [error, setError] = useState(null);
 
   const handleInput = (e) => {
