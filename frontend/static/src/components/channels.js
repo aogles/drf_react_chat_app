@@ -116,7 +116,20 @@ function ChannelsList() {
   //editMessage
 
   //deleteMessage
-  // fetch request will delete message on the detail apiview
+  const deleteMessage = asyn (event) => {
+    const id= event.currentTarget.value;
+    const options = {
+      method: "DELETE",
+      headers:{ "Content-Type": "application/json",
+      "X-CSRFToken": Cookies.get("csrftoken"),}
+    };
+
+ }; 
+};
+const response = await fetch("/api_v1/channels/messages", options);
+if (!response.ok) {
+  throw new Error("network repsonse not ok.");
+} // fetch request will delete message on the detail apiview
 
   return (
     <div className="App">
