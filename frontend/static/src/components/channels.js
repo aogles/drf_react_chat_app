@@ -22,7 +22,7 @@ function ChannelsList() {
       setChannels(data);
     };
     const getMessages = async () => {
-      const response = await fetch("/api_v1/channels/1/messages/");
+      const response = await fetch("/api_v1/channels/messages/");
       if (!response.ok) {
         throw new Error("Network response was not OK");
       }
@@ -84,8 +84,31 @@ function ChannelsList() {
 
   // console.log(caption);
 
-  //addMessage
-  // fetch request will send caption to the
+  const addMessage = async (event) => {
+    event.preventDefault();
+
+    const newMessage = {
+      text: caption,
+      channel: selectChannel,
+    };
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": Cookies.get("csrftoken"),
+      },
+      body: JSON.stringify(newMessage),
+    };
+    const response = await fetch("/api_v1/channels/messages", options);
+    if (!response.ok) {
+      throw new Error("network repsonse not ok.");
+    }
+    const data = await response.json();
+
+    setMessages([...messages, data]);
+
+    setCaption("");
+  }; // fetch request will send caption to the
   // need to send the channel id in the params
   console.log(caption);
   console.log(selectedChannel);
@@ -118,7 +141,7 @@ function ChannelsList() {
             placeholder="Enter your message here"
           />
           <div className="mt-2 pt-2 border-top">
-            <button type="button" onClick={() => console.log("submit")}>
+            <button type="button" onClick={addMessage}>
               {" "}
               add message
             </button>
