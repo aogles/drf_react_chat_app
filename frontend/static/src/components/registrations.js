@@ -54,13 +54,12 @@ function RegistrationForm(props) {
   };
   return (
     <>
-      <h1>Welcome</h1>
+      <div>"testing"</div>
 
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3" controlId="formBasicUsername">
           <Form.Label>Username</Form.Label>
           <Form.Control
-            //   id="username"
             type="text"
             placeholder="Enter username"
             name="username"
@@ -72,7 +71,6 @@ function RegistrationForm(props) {
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>Password 1</Form.Label>
           <Form.Control
-            //   id="password"
             type="password"
             id="password1"
             placeholder="Enter password 1"
@@ -86,7 +84,6 @@ function RegistrationForm(props) {
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>Password 2</Form.Label>
           <Form.Control
-            //   id="password"
             type="password"
             id="password2"
             placeholder="Enter password 2"
@@ -101,7 +98,6 @@ function RegistrationForm(props) {
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Email Address</Form.Label>
           <Form.Control
-            //   id="email"
             type="email"
             placeholder="Enter email"
             name="email"
