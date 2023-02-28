@@ -20,9 +20,16 @@ function ChannelsList() {
 
       const data = await response.json();
       setChannels(data);
+      setSelectedChannel(data[0].id);
     };
+    getChannels();
+  }, []);
+
+  useEffect(() => {
     const getMessages = async () => {
-      const response = await fetch("/api_v1/channels/messages/");
+      const response = await fetch(
+        `/api_v1/channels/messages/?channel=${selectedChannel}`
+      );
       if (!response.ok) {
         throw new Error("Network response was not OK");
       }
@@ -31,9 +38,10 @@ function ChannelsList() {
       setMessages(data);
     };
 
-    getChannels();
-    getMessages();
-  }, []);
+    if (!!selectedChannel) {
+      getMessages();
+    }
+  }, [selectedChannel]);
 
   const addChannel = async () => {
     const channel = {
@@ -56,94 +64,76 @@ function ChannelsList() {
     setChannels([...channels, data]);
   };
 
-  const selectChannel = async (id) => {
-    const response = await fetch(`/api_v1/channels/${id}/messages/`);
+  const addMessage = async (channel) => {
+    const newMessage = {
+      text: caption,
+      channel: selectedChannel,
+    };
+
+    const response = await fetch(`/api_v1/channels/messages/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": Cookies.get("csrftoken"),
+      },
+      body: JSON.stringify(newMessage),
+    }).catch((err) => console.warn(err));
 
     if (!response.ok) {
-      throw new Error("Network response was not OK,Messages");
+      throw new Error("Failed to add message");
     }
 
     const data = await response.json();
-    setSelectedChannel(data);
-    setMessages(data);
-  };
 
-  const channelsHTML = channels?.map((channel) => (
-    <button
-      key={channel.id}
-      type="button"
-      onClick={() => selectChannel(channel.id)}
-    >
-      {channel.title}
-    </button>
-  ));
-
-  const addMessage = async (channel) => {
-    try {
-      const newMessage = { caption };
-      const response = await fetch(`/api_v1/channels/${channel.id}/messages/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newMessage),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to add message");
-      }
-
-      const data = await response.json();
-
-      setMessages([...messages, data]);
-      setCaption("");
-    } catch (error) {
-      console.error(error);
-    }
+    setMessages([...messages, data]);
+    setCaption("");
   };
 
   const deleteMessage = async (id) => {
-    const response = await fetch(`/api_v1/messages/${id}/`, {
+    const response = await fetch(`/api_v1/channels/messages/${id}/`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         "X-CSRFToken": Cookies.get("csrftoken"),
       },
     });
+
     if (!response.ok) {
       throw new Error("Failed to delete message");
     }
 
-    const messagesAfterDelete = messages.filter((message) => message.id !== id);
-    setMessages(messagesAfterDelete);
+    setMessages(messages.filter((message) => message.id !== id));
   };
 
-  const editMessage = async (id, newCaption) => {
-    const response = await fetch(`/api_v1/messages/${id}/`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": Cookies.get("csrftoken"),
-      },
-      body: JSON.stringify({ caption: newCaption }),
-    });
-    if (!response.ok) {
-      throw new Error("Failed to update message");
-    }
-    const data = await response.json();
-    const messagesAfterEdit = messages.map((message) =>
-      message.id === id ? { ...message, caption: newCaption } : message
+  const editMessage = (id, newCaption) => {
+    setMessages(
+      messages.map((message) =>
+        message.id === id ? { ...message, caption: newCaption } : message
+      )
     );
-    setMessages(messagesAfterEdit);
   };
 
-  const messagesHTML = (selectedChannel ? selectedChannel : messages).map(
-    (message) => (
-      <div key={message.id}>
-        <p>{message.caption}</p>
+  const channelsHTML = channels?.map((channel) => (
+    <button
+      key={channel.id}
+      type="button"
+      onClick={() => setSelectedChannel(channel.id)}
+    >
+      {channel.title}
+    </button>
+  ));
+
+  const messagesHTML = messages.map((message) => (
+    <div key={message.id}>
+      <p>{message.text}</p>
+      <p>{message.username}</p>
+      {(message.role === "user" || message.role === "admin") && (
         <button type="button" onClick={() => deleteMessage(message.id)}>
           Delete Message
         </button>
+      )}
+
+      {message.role === "user" && (
         <button
           type="button"
           onClick={() =>
@@ -155,9 +145,9 @@ function ChannelsList() {
         >
           Edit
         </button>
-      </div>
-    )
-  );
+      )}
+    </div>
+  ));
 
   return (
     <div className="App">
@@ -189,7 +179,7 @@ function ChannelsList() {
             placeholder="Enter your message here"
           />
           <div className="mt-2 pt-2 border-top">
-            <button type="button" onClick={() => addMessage(selectedChannel)}>
+            <button type="button" onClick={addMessage}>
               add message
             </button>
           </div>

@@ -6,8 +6,9 @@ from .views import MessageDetailAPIView, ChannelDetailAPIView
 
 
 urlpatterns = [
-    path('<int:channel>/messages/<int:pk/', MessageDetailAPIView.as_view()),
-    path('<int:channel>/messages/', MessageListAPIView.as_view()),
+    path('messages/<int:pk>/', MessageDetailAPIView.as_view()),
+    # path('<int:channel>/messages/<int:pk/', MessageDetailAPIView.as_view()),
+    path('messages/', MessageListAPIView.as_view()),
     path('<int:pk>/', ChannelDetailAPIView.as_view()),
     path('', ChannelListAPIView.as_view()),
 ]

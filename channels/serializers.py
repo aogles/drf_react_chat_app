@@ -10,6 +10,17 @@ class ChannelSerializer(serializers.ModelSerializer):
 
 
 class MessageSerializer(serializers.ModelSerializer):
+    username = serializers.ReadOnlyField(source='user.username')
+    role = serializers.SerializerMethodField()
+
     class Meta:
         model = Message
         fields = '__all__'
+
+    def get_role(self, obj):
+        if self.context.get('request').user == obj.user:
+            return 'user'
+        elif self.context.get('request').user.is_superuser:
+            return 'admin'
+        else:
+            return None
