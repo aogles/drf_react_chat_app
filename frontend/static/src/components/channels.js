@@ -6,6 +6,7 @@ import Form from "react-bootstrap/Form";
 
 function ChannelsList() {
   const [caption, setCaption] = useState("");
+  const [title, setTitle] = useState("");
   const [channels, setChannels] = useState(null);
   const [messages, setMessages] = useState([]);
   const [selectedChannel, setSelectedChannel] = useState(null);
@@ -45,7 +46,7 @@ function ChannelsList() {
 
   const addChannel = async () => {
     const channel = {
-      title: "a chat group added",
+      title: title,
     };
     const options = {
       method: "POST",
@@ -154,7 +155,13 @@ function ChannelsList() {
       <Card>
         <Card.Header>{channelsHTML}</Card.Header>
         <Card.Body>
-          <Card.Title></Card.Title>
+          <input
+            onChange={(e) => setTitle(e.target.value)}
+            type="text"
+            value={title}
+            name="title"
+            placeholder="add a chat group"
+          ></input>
           <Form.Label>Channel name</Form.Label>
           <button type="button" onClick={addChannel}>
             add Chat Group
