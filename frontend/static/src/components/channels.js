@@ -64,7 +64,7 @@ function ChannelsList() {
     }
 
     const data = await response.json();
-    setSelectedChannel(id);
+    setSelectedChannel(data);
     setMessages(data);
   };
 
@@ -78,58 +78,86 @@ function ChannelsList() {
     </button>
   ));
 
-  const messagesHTML = messages?.map((message) => (
-    <div key={message.id}>{message.text}</div>
-  ));
+  const addMessage = async (channel) => {
+    try {
+      const newMessage = { caption };
+      const response = await fetch(`/api_v1/channels/${channel.id}/messages/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newMessage),
+      });
 
-  // console.log(caption);
+      if (!response.ok) {
+        throw new Error("Failed to add message");
+      }
 
-  const addMessage = async (event) => {
-    event.preventDefault();
+      const data = await response.json();
 
-    const newMessage = {
-      text: caption,
-      channel: selectChannel,
-    };
-    const options = {
-      method: "POST",
+      setMessages([...messages, data]);
+      setCaption("");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const deleteMessage = async (id) => {
+    const response = await fetch(`/api_v1/messages/${id}/`, {
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         "X-CSRFToken": Cookies.get("csrftoken"),
       },
-      body: JSON.stringify(newMessage),
-    };
-    const response = await fetch("/api_v1/channels/messages", options);
+    });
     if (!response.ok) {
-      throw new Error("network repsonse not ok.");
+      throw new Error("Failed to delete message");
+    }
+
+    const messagesAfterDelete = messages.filter((message) => message.id !== id);
+    setMessages(messagesAfterDelete);
+  };
+
+  const editMessage = async (id, newCaption) => {
+    const response = await fetch(`/api_v1/messages/${id}/`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": Cookies.get("csrftoken"),
+      },
+      body: JSON.stringify({ caption: newCaption }),
+    });
+    if (!response.ok) {
+      throw new Error("Failed to update message");
     }
     const data = await response.json();
+    const messagesAfterEdit = messages.map((message) =>
+      message.id === id ? { ...message, caption: newCaption } : message
+    );
+    setMessages(messagesAfterEdit);
+  };
 
-    setMessages([...messages, data]);
-
-    setCaption("");
-  }; // fetch request will send caption to the
-  // need to send the channel id in the params
-  console.log(caption);
-  console.log(selectedChannel);
-
-  //editMessage
-
-  //deleteMessage
-  const deleteMessage = asyn (event) => {
-    const id= event.currentTarget.value;
-    const options = {
-      method: "DELETE",
-      headers:{ "Content-Type": "application/json",
-      "X-CSRFToken": Cookies.get("csrftoken"),}
-    };
-
- }; 
-};
-const response = await fetch("/api_v1/channels/messages", options);
-if (!response.ok) {
-  throw new Error("network repsonse not ok.");
-} // fetch request will delete message on the detail apiview
+  const messagesHTML = (selectedChannel ? selectedChannel : messages).map(
+    (message) => (
+      <div key={message.id}>
+        <p>{message.caption}</p>
+        <button type="button" onClick={() => deleteMessage(message.id)}>
+          Delete Message
+        </button>
+        <button
+          type="button"
+          onClick={() =>
+            editMessage(
+              message.id,
+              prompt("Enter the new caption for this message:")
+            )
+          }
+        >
+          Edit
+        </button>
+      </div>
+    )
+  );
 
   return (
     <div className="App">
@@ -143,8 +171,15 @@ if (!response.ok) {
           </button>
         </Card.Body>
       </Card>
-
-      <form role="alert" aria-live="assertive" aria-atomic="true">
+      <form
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+        onSubmit={(e) => {
+          e.preventDefault();
+          console.log("submit");
+        }}
+      >
         <div className="toast-body">
           <input
             onChange={(e) => setCaption(e.target.value)}
@@ -154,24 +189,8 @@ if (!response.ok) {
             placeholder="Enter your message here"
           />
           <div className="mt-2 pt-2 border-top">
-            <button type="button" onClick={addMessage}>
-              {" "}
+            <button type="button" onClick={() => addMessage(selectedChannel)}>
               add message
-            </button>
-            <button
-              type="button"
-              className="btn btn-primary btn-sm"
-              onClick={() => console.log("submit")}
-            >
-              Delete Message
-            </button>
-            <button
-              type="button"
-              className="btn btn-secondary btn-sm"
-              data-bs-dismiss="toast"
-              onSubmit={() => console.log("submit")}
-            >
-              Edit
             </button>
           </div>
         </div>
@@ -180,4 +199,5 @@ if (!response.ok) {
     </div>
   );
 }
+
 export default ChannelsList;
