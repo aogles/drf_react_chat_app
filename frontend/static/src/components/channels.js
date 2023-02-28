@@ -106,10 +106,29 @@ function ChannelsList() {
     setMessages(messages.filter((message) => message.id !== id));
   };
 
-  const editMessage = (id, newCaption) => {
+  const editMessage = async (id, newCaption) => {
+    const updatedMessage = {
+      text: newCaption,
+    };
+
+    const response = await fetch(`/api_v1/channels/messages/${id}/`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": Cookies.get("csrftoken"),
+      },
+      body: JSON.stringify(updatedMessage),
+    }).catch((err) => console.warn(err));
+
+    if (!response.ok) {
+      throw new Error("Failed to update message");
+    }
+
+    const data = await response.json();
+
     setMessages(
       messages.map((message) =>
-        message.id === id ? { ...message, caption: newCaption } : message
+        message.id === id ? { ...message, text: data.text } : message
       )
     );
   };
