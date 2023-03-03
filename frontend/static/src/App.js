@@ -47,7 +47,7 @@ function App() {
 
       {page === "channels" && <ChannelsList />}
       {page === "login" && <LoginForm setPage={setPage} />}
-      {page === "registration" && <RegistrationForm />}
+      {page === "registration" && <RegistrationForm setPage={setPage} />}
     </div>
   );
 }

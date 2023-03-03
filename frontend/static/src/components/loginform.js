@@ -46,6 +46,7 @@ function LoginForm(props) {
 
   return (
     <div className="loginpage">
+      <h1>Welcome to Click@Night</h1>
       <form className="loginform" onSubmit={handleSubmit}>
         <label html="email">Enter Email</label>
         <input
