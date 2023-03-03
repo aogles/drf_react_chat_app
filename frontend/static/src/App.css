@@ -1,18 +1,69 @@
 .App {
   text-align: center;
+  background-color: rgb(4, 4, 4);
+}
+.wrapper {
+  background-image: url(https://images.unsplash.com/photo-1631058269796-6ea2654cc78b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=435&q=80);
+  border: solid #fd4bb0;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.wrapper h1 {
+  top: 20px;
+  font-family: "droid";
+  font-size: 7rem;
+  color: #fff;
+  text-shadow: 0 0 7px rgb(255, 255, 255), 0 0 10px #fff, 0 0 21px #fff,
+    0 0 42px rgb(205, 174, 189), 0 0 82px rgb(201, 169, 193),
+    0 0 92px rgb(189, 81, 162), 0 0 102px rgb(161, 97, 145),
+    0 0 151px rgb(239, 52, 193);
+  animation: animate 3s infinite alternate;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+@keyframes animate {
+  40% {
+    opacity: 1;
+  }
+  42% {
+    opacity: 0.8;
+  }
+  43% {
+    opacity: 1;
+  }
+  45% {
+    opacity: 0.3;
+  }
+  46% {
+    opacity: 1;
   }
 }
 
+.channelform {
+  background-image: url(https://images.unsplash.com/photo-1536928966032-83f683b965ef?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80);
+  font-style: italic;
+}
+.channelbutton {
+  color: white;
+  background-color: rgb(222, 62, 145);
+  border-radius: 15px;
+  width: 150px;
+  height: 40px;
+  box-shadow: 1px 1px 2px black, 0 0 25px rgb(179, 1, 108),
+    0 0 5px rgb(235, 73, 181);
+  right: 50px;
+}
+.togglebutton {
+  background-color: rgb(222, 62, 145);
+  box-shadow: 1px 1px 2px black, 0 0 25px rgb(179, 1, 108),
+    0 0 5px rgb(235, 73, 181);
+  border-radius: 15px;
+  width: 150px;
+  height: 40px;
+}
+.channelinput {
+  background-color: #282c34;
+  border-radius: 15px;
+  width: 350px;
+  height: 40px;
+}
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -23,16 +74,57 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
-
 .App-link {
-  color: #61dafb;
+  color: #a916b3;
+}
+.toast-body {
+  height: 200px;
+  width: 300px;
+  margin-left: 40px;
+  margin-top: 30px;
+  box-shadow: 2px 1px 1px black, 0 0 15px rgb(179, 1, 108),
+    0 0 15px rgb(235, 73, 181);
+}
+.toast-body input {
+  background-color: #282c34;
+  color: #fff;
+  width: 270px;
+  height: 100px;
+}
+.toast-body button {
+  background-color: rgb(222, 62, 145);
+  border-radius: 15px;
+  width: 150px;
+  height: 40px;
+  color: #fff;
+}
+.toast-body img {
+  height: 200px;
+  box-shadow: 2px 1px 1px black, 0 0 15px rgb(179, 1, 108),
+    0 0 15px rgb(235, 73, 181);
+}
+.messagemodal {
+  border-radius: 15px;
+  height: 100px;
+  width: 500px;
+  font-size: 20px;
+  margin-bottom: 1in;
+  box-shadow: 1px 1px 2px black, 0 0 25px rgb(179, 1, 108),
+    0 0 5px rgb(235, 73, 181);
+}
+.loginform {
+  text-align: center;
+  width: fit-content;
+  block-size: fit-content;
+  margin-left: 2.5in;
+  color: #fff;
+  border-color: #f4e9ef;
+  box-shadow: 1px 1px 2px black, 0 0 25px rgb(179, 1, 108),
+    0 0 5px rgb(235, 73, 181);
+  margin-top: 1in;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.loginpage {
+  background-image: url(https://images.unsplash.com/photo-1556035511-3168381ea4d4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80);
+  height: 100vh;
 }

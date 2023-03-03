@@ -45,8 +45,8 @@ function LoginForm(props) {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
+    <div className="loginpage">
+      <form className="loginform" onSubmit={handleSubmit}>
         <label html="email">Enter Email</label>
         <input
           id="email"
@@ -78,8 +78,8 @@ function LoginForm(props) {
         ></input>
 
         <button type="submit">Login</button>
+        <button>Need an account?</button>
       </form>
-      <button>Need an account?</button>
     </div>
   );
 }

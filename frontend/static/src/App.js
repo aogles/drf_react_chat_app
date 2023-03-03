@@ -31,7 +31,7 @@ function App() {
   };
 
   return (
-    <>
+    <div className="wrapper">
       {page === "channels" && (
         <>
           <Breadcrumb>
@@ -41,13 +41,14 @@ function App() {
 
             <Breadcrumb.Item onClick={handleLogout}>Logout</Breadcrumb.Item>
           </Breadcrumb>
+          <h1 id="page-title">Click@Night</h1>
         </>
       )}
 
       {page === "channels" && <ChannelsList />}
       {page === "login" && <LoginForm setPage={setPage} />}
       {page === "registration" && <RegistrationForm />}
-    </>
+    </div>
   );
 }
 

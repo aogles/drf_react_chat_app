@@ -152,16 +152,10 @@ function ChannelsList() {
       className="modal show"
       style={{ display: "block", position: "initial" }}
     >
-      <Modal.Dialog>
-        <Modal.Header>
-          <Modal.Title>{message.username} </Modal.Title>
-        </Modal.Header>
-
+      <Modal.Dialog className="messagemodal">
         <Modal.Body>
+          <h2>{message.username}</h2>
           <p>{message.text}</p>
-        </Modal.Body>
-
-        <Modal.Footer>
           {(message.role === "user" || message.role === "admin") && (
             <Button
               variant="secondary"
@@ -171,7 +165,6 @@ function ChannelsList() {
               Delete Message
             </Button>
           )}
-
           {message.role === "user" && (
             <Button
               variant="primary"
@@ -187,27 +180,38 @@ function ChannelsList() {
               Edit
             </Button>
           )}
-        </Modal.Footer>
+        </Modal.Body>
       </Modal.Dialog>
     </div>
   ));
 
   return (
     <div className="App">
-      <Card>
+      {selectedChannel}
+
+      <Card className="channelform">
         <Card.Header>
           <Dropdown>
             <input
+              className="channelinput"
               onChange={(e) => setTitle(e.target.value)}
               type="text"
               value={title}
               name="title"
               placeholder="add a chat group"
             ></input>
-            <button type="button" onClick={addChannel}>
+            <button
+              className="channelbutton"
+              type="button"
+              onClick={addChannel}
+            >
               Add a Chat Group
             </button>
-            <Dropdown.Toggle variant="success" id="dropdown-basic">
+            <Dropdown.Toggle
+              className="togglebutton"
+              variant="success"
+              id="dropdown-basic"
+            >
               Chat Groups
             </Dropdown.Toggle>
 
@@ -227,7 +231,7 @@ function ChannelsList() {
           console.log("submit");
         }}
       >
-        <div className="toast-body">
+        <div id="addMessage" className="toast-body">
           <input
             onChange={(e) => setCaption(e.target.value)}
             value={caption}
@@ -236,6 +240,7 @@ function ChannelsList() {
             placeholder="Enter your message here"
           />
           <div className="mt-2 pt-2 border-top">
+            <img src="https://images.unsplash.com/photo-1536928966032-83f683b965ef?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" />
             <button type="button" onClick={addMessage}>
               add message
             </button>
