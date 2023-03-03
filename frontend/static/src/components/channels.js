@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
-import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
+import Dropdown from "react-bootstrap/Dropdown";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 
 function ChannelsList() {
   const [caption, setCaption] = useState("");
@@ -134,57 +136,86 @@ function ChannelsList() {
   };
 
   const channelsHTML = channels?.map((channel) => (
-    <button
+    <Dropdown.Item
       key={channel.id}
       type="button"
       onClick={() => setSelectedChannel(channel.id)}
     >
+      {" "}
       {channel.title}
-    </button>
+    </Dropdown.Item>
   ));
 
   const messagesHTML = messages.map((message) => (
-    <div key={message.id}>
-      <p>{message.text}</p>
-      <p>{message.username}</p>
-      {(message.role === "user" || message.role === "admin") && (
-        <button type="button" onClick={() => deleteMessage(message.id)}>
-          Delete Message
-        </button>
-      )}
+    <div
+      key={message.id}
+      className="modal show"
+      style={{ display: "block", position: "initial" }}
+    >
+      <Modal.Dialog>
+        <Modal.Header>
+          <Modal.Title>{message.username} </Modal.Title>
+        </Modal.Header>
 
-      {message.role === "user" && (
-        <button
-          type="button"
-          onClick={() =>
-            editMessage(
-              message.id,
-              prompt("Enter the new caption for this message:")
-            )
-          }
-        >
-          Edit
-        </button>
-      )}
+        <Modal.Body>
+          <p>{message.text}</p>
+        </Modal.Body>
+
+        <Modal.Footer>
+          {(message.role === "user" || message.role === "admin") && (
+            <Button
+              variant="secondary"
+              type="button"
+              onClick={() => deleteMessage(message.id)}
+            >
+              Delete Message
+            </Button>
+          )}
+
+          {message.role === "user" && (
+            <Button
+              variant="primary"
+              type="button"
+              onClick={() =>
+                editMessage(
+                  message.id,
+                  prompt("Enter the new caption for this message:")
+                )
+              }
+            >
+              {" "}
+              Edit
+            </Button>
+          )}
+        </Modal.Footer>
+      </Modal.Dialog>
     </div>
   ));
 
   return (
     <div className="App">
       <Card>
-        <Card.Header>{channelsHTML}</Card.Header>
+        <Card.Header>
+          <Dropdown>
+            <input
+              onChange={(e) => setTitle(e.target.value)}
+              type="text"
+              value={title}
+              name="title"
+              placeholder="add a chat group"
+            ></input>
+            <button type="button" onClick={addChannel}>
+              Add a Chat Group
+            </button>
+            <Dropdown.Toggle variant="success" id="dropdown-basic">
+              Chat Groups
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>{channelsHTML}</Dropdown.Menu>
+          </Dropdown>
+        </Card.Header>
         <Card.Body>
-          <input
-            onChange={(e) => setTitle(e.target.value)}
-            type="text"
-            value={title}
-            name="title"
-            placeholder="add a chat group"
-          ></input>
-          <Form.Label>Channel name</Form.Label>
-          <button type="button" onClick={addChannel}>
-            add Chat Group
-          </button>
+          <Form.Label></Form.Label>
         </Card.Body>
       </Card>
       <form
@@ -211,6 +242,7 @@ function ChannelsList() {
           </div>
         </div>
       </form>
+
       {messagesHTML}
     </div>
   );
